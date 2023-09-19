@@ -7,3 +7,4 @@ ctransformers
 faiss-cpu
 streamlit_player
 replicate
+langchain
