@@ -1,6 +1,7 @@
 import assemblyai as aai
 import streamlit as st
 import os
+import uuid
 from dotenv import load_dotenv
 load_dotenv('.env')
 
@@ -42,11 +43,13 @@ def topic_detection(audio_file):
     for result in transcript.iab_categories.results:
         for label in result.labels:
             print(label.label)
-@st.cache_data
 def generate_subtitle(audio_file):
+    uid = uuid.uuid4()
+    file_path = f"generated_files/generated_subtitle_{uid}.srt"
     transcript = transcriber.transcribe(audio_file)
     subtitle = transcript.export_subtitles_srt()
-    subtitle_txt = open('generated_subtitle.srt', 'a')
+    subtitle_txt = open(file_path, 'a')
     subtitle_txt.write(subtitle)
     subtitle_txt.close()
     os.remove(audio_file)
+    return file_path

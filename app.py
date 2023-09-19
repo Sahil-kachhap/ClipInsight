@@ -1,10 +1,8 @@
 import streamlit as st
-import replicate
 from streamlit_player import st_player
 from pytube import YouTube
 from aai import summarize_video, generate_subtitle
-from llm_model import split_transcript, init_llama_response
-from moviepy.editor import *
+from llm_model import init_llama_response
 import os
 
 
@@ -48,7 +46,6 @@ def main():
     with st.sidebar.expander('**About**'):
         st.markdown("""
             - Introducing our innovative platform, the ultimate companion for YouTube enthusiasts! 🚀 Unlock a world of convenience as you effortlessly access chapter summaries and highlights with precise timestamps, making video navigation a breeze.
-            - Need subtitles? We've got you covered – download them in a snap. 
             - But that's not all! 📚🕐 Dive deeper into video content with our interactive chat feature, empowering you to uncover hidden gems and engage with the material like never before. 
             - Discover, explore, and enjoy YouTube in a whole new way with our all-in-one YouTube Companion! 🌟""")
     
@@ -72,20 +69,17 @@ def main():
             status.update(label="Transcription completed! 🎉", state="complete", expanded=False) 
     
     # Functionality to generate subtitle file (as .srt)
-    with st.sidebar.expander('**Generate Subtitle**'):
-        url = st.text_input("Enter Youtube Video URL")
-        if url:
-            st.toast("🎙️ Capturing Audio Magic...")
-            file = download_video(url)
-            st.toast("🚀 Transcribing Whispers...")
-            generate_subtitle(file)
-            st.toast("✨ Transforming Words into Subtitles...")
-            read_file = open('generated_subtitle.srt','r')
-            st.toast("📦 Subtitles Ready for the Spotlight!")
-            st.download_button(label="Download", data=read_file, file_name= "generated_subtitle.srt",mime='text/plain')
-            st.button("Clear")
-            # read_file.close()
-            # os.remove('generated_subtitle.srt')
+    # with st.sidebar.expander('**Generate Subtitle**'):
+    #     url = st.text_input("Enter Youtube Video URL")
+    #     if url:
+    #         st.toast("🎙️ Capturing Audio Magic...")
+    #         file = download_video(url)
+    #         st.toast("🚀 Transcribing Whispers...")
+    #         file_path = generate_subtitle(file)
+    #         st.toast("✨ Transforming Words into Subtitles...")
+    #         read_file = open(file_path,'r')
+    #         st.toast("📦 Subtitles Ready for the Spotlight!")
+    #         st.download_button(label="Download", data=read_file, file_name= "generated_subtitle.srt",mime='text/plain')
             
     
     # An example youtube url to test the webapp for video summarization
@@ -95,6 +89,7 @@ def main():
     # clear chat history
     def clear_chat_history():
         st.session_state.messages = []
+        st.session_state['chapters'] = []
     st.sidebar.button("Clear Chat History", on_click=clear_chat_history)
 
     if "chapters" in st.session_state:
