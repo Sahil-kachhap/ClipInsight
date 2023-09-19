@@ -9,7 +9,7 @@ import os
 
 
 st.set_page_config(
-    page_title="Video Summarizer",
+    page_title="ClipInsight",
     page_icon="📺"
 )
 
@@ -41,8 +41,7 @@ def addButton(start_ms, url):
         st_player(url_time)
 
 def main():
-    audio_transcript = ""
-    st.title("Youtube Video Summarizer 🎥")
+    st.title("ClipInsight - Video Summarizer 🎥")
     st.markdown('<style>h1{text-align:center;} </style>', unsafe_allow_html=True)
     
     # About Section - tell users what this webapp is all about
@@ -65,11 +64,12 @@ def main():
             file_path = download_video(youtube_url)
             st.write('🚀 Transcribing underway...Stay with us.')
             transcript, chapters = summarize_video(file_path)
-            audio_transcript = transcript
+            st.session_state['transcript'] = transcript
+            st.session_state['chapters'] = chapters
             st.write("🎤 Ta-da! Transcription's done!")
             st.toast("🎤 Ta-da! Transcription's done!")
             st.session_state.messages.append({"role": "assistant","content":chapters})   
-            status.update(label="Transcription completed!", state="complete", expanded=False) 
+            status.update(label="Transcription completed! 🎉", state="complete", expanded=False) 
     
     # Functionality to generate subtitle file (as .srt)
     with st.sidebar.expander('**Generate Subtitle**'):
@@ -82,7 +82,11 @@ def main():
             st.toast("✨ Transforming Words into Subtitles...")
             read_file = open('generated_subtitle.srt','r')
             st.toast("📦 Subtitles Ready for the Spotlight!")
-            st.download_button(label="Download", data=read_file,file_name= "generated_subtitle.srt",mime='text/plain')
+            st.download_button(label="Download", data=read_file, file_name= "generated_subtitle.srt",mime='text/plain')
+            st.button("Clear")
+            # read_file.close()
+            # os.remove('generated_subtitle.srt')
+            
     
     # An example youtube url to test the webapp for video summarization
     with st.sidebar.expander('**Example URL**'):
@@ -93,27 +97,32 @@ def main():
         st.session_state.messages = []
     st.sidebar.button("Clear Chat History", on_click=clear_chat_history)
 
-    if "messages" not in st.session_state:
-        st.session_state.messages = []
-    
-    if len(st.session_state.messages) == 1:
-        for message in st.session_state.messages:
-            with st.chat_message(message["role"]):
-               for chapter in message["content"]:
+    if "chapters" in st.session_state:
+        with st.chat_message("assistant"):
+            for chapter in st.session_state['chapters']:
                 addButton(chapter.start, youtube_url)
                 st.subheader(chapter.gist)
                 st.markdown(chapter.summary)
+
+    if "messages" not in st.session_state.keys():
+        st.session_state.messages = []
+    
+    # Display chat messages from history on app rerun
+    for message in st.session_state.messages[1:]:
+        with st.chat_message(message["role"]):
+            st.markdown(message["content"])
     
     if prompt := st.chat_input("Send your message", disabled=not st.session_state.messages):
         st.session_state.messages.append({"role": "user","content":prompt})
         with st.chat_message("user"):
             st.markdown(prompt)        
+        
     
     # Generate a new response if last message is not from assistant
     if st.session_state.messages and st.session_state.messages[-1]["role"] != "assistant":
         with st.chat_message("assistant"):
             with st.spinner("Thinking..."):
-                response = init_llama_response(audio_transcript,prompt)
+                response = init_llama_response(st.session_state['transcript'], prompt)
                 placeholder = st.empty()
                 full_response = ''
                 for item in response:

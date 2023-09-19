@@ -15,17 +15,19 @@ config = aai.TranscriptionConfig(
 topics_config = aai.TranscriptionConfig(iab_categories=True)
 transcriber = aai.Transcriber()
 
+@st.cache_data
 def get_chapters(url):
     config = aai.TranscriptionConfig(auto_chapters=True)
     transcript = transcriber.transcribe(url, config)
     return transcript.chapters
 
+@st.cache_data
 def summarize_video(video_url):
     transcript = transcriber.transcribe(video_url, config) # add your file here
-    #identify_speakers(video_url)
     chapters = get_chapters(video_url)
     os.remove(video_url)
     return transcript.text, chapters
+
 
 def identify_speakers(video_url):
     transcript = transcriber.transcribe(video_url, config=aai.TranscriptionConfig(speaker_labels=True))
@@ -40,12 +42,11 @@ def topic_detection(audio_file):
     for result in transcript.iab_categories.results:
         for label in result.labels:
             print(label.label)
-
+@st.cache_data
 def generate_subtitle(audio_file):
     transcript = transcriber.transcribe(audio_file)
     subtitle = transcript.export_subtitles_srt()
     subtitle_txt = open('generated_subtitle.srt', 'a')
     subtitle_txt.write(subtitle)
-    subtitle_txt.close
+    subtitle_txt.close()
     os.remove(audio_file)
-    
