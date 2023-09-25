@@ -15,7 +15,7 @@
 
 https://github.com/Sahil-kachhap/ClipInsight/assets/54017876/4b1421df-61bf-42e6-abdf-e7fdf97d4f99
 
-**ClipInsight** is the result of a creative whirlwind during LLM Hackathon by Streamlit, where we set out to tackle the frustration of navigating through lengthy video content on platforms like YouTube. Our mission was to make video content more accessible, interactive, and time-efficient for users from all walks of life.
+**ClipInsight** is the result of a creative whirlwind during **LLM Hackathon by Streamlit** and **Generative AI hackathon by Peerlist**, where we set out to tackle the frustration of navigating through lengthy video content on platforms like YouTube. Our mission was to make video content more accessible, interactive, and time-efficient for users from all walks of life.
 
 **Why?** Because we believe that knowledge should be easily accessible and engaging for everyone.
 
