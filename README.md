@@ -48,8 +48,9 @@ To get started with ClipInsight, follow these simple steps:
 
 We welcome contributions from the community. Whether it's code, design, or ideas, your input is valuable.
 
-## WellTestedAI OctoberFest
-
+## WellTestedAI OctoberFest 
 I have added 2 unit tests described below :-
-1. download_video_test.py - this units tests the download_video() method which actually extracts audio from a youtube video url.
-2. split_transcript_test.py - this unit test tests the split_transcript() which is a utility method in itself and helps in breaking a huge file of text into several chunks.
+1. **download_video_test.py** - this units tests the download_video() method which actually extracts audio from a youtube video url.
+2. **split_transcript_test.py** - this unit test tests the split_transcript() which is a utility method in itself and helps in breaking a huge file of text into several chunks.
+
+Checkout this [Commit](https://github.com/Sahil-kachhap/ClipInsight/commit/48dd74c640afdb9ac1e2ff43865278cdafd45849) for more details.
