@@ -53,4 +53,6 @@ I have added 2 unit tests described below :-
 1. **download_video_test.py** - this unit test tests the download_video() method which actually extracts audio from a youtube video url.
 2. **split_transcript_test.py** - this unit test tests the split_transcript() method which is a utility method in itself and helps in breaking a huge file of text into several chunks.
 
+- To Run the test file: `python -m unittest <file_name>.py`
+
 Checkout this [Commit](https://github.com/Sahil-kachhap/ClipInsight/commit/48dd74c640afdb9ac1e2ff43865278cdafd45849) for more details.
